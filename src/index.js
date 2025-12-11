@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import MathContainer from './components/MathContainer';
+import MathContainer from './components/math/MathContainer';
 
 function App() {
   return (
@@ -10,7 +10,6 @@ function App() {
       <div>
         <MathContainer />
       </div>
-      
     </div>
   );
 }
