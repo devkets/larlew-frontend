@@ -8,6 +8,7 @@ function DiceGamePlayerForm(props) {
   const [diceTwo, setDiceTwo] = useState("");
   const [loading, setLoading] = useState(false);
   const [ruleApplied, setRuleApplied] = useState("");
+  const [rollAgain, setRollAgain] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -21,7 +22,6 @@ function DiceGamePlayerForm(props) {
   }, [props.resetTrigger]);
 
   const rollDice = () => {
-    setRuleApplied("");
     setLoading(true);
     setError(null);
     const die1 = Math.floor(Math.random() * 6) + 1;
@@ -36,28 +36,37 @@ function DiceGamePlayerForm(props) {
     setLoading(false);
     if (adjustedSum >= 100) {
       props.setWinner(props.playerNumber);
-    } else {
+    } else if (!rollAgain) {
       props.advanceTurn();
     }
+    setRollAgain(false);
   };
 
   const checkForRoundEndRules = (sumValue) => {
-    // Check if the number ends with a zero
-    if (sumValue % 10 === 0) {
-      setRuleApplied(sumValue + " Ends with 0: Reset to 0");
-      return 0;
+    switch (sumValue % 10) {
+      case 0:
+        setRuleApplied("Total of " + sumValue + " ends with 0: Reset to 0");
+        return 0;
+      case 2:
+        setRuleApplied("Total of " + sumValue + " ends with 2: Add 10");
+        return sumValue + 10;
+      case 4:
+        if (sumValue > 10) {
+          setRuleApplied("Total of " + sumValue + " ends with 4: Subtract 10");
+          return sumValue - 10;
+        }
+        break;
+      case 5:
+        setRuleApplied("Total of " + sumValue + " ends with 5: Divide total by 2");
+        return Math.floor(sumValue / 2);
+          case 7:
+        setRuleApplied("Total of " + sumValue + " ends with 7: Roll again!");
+        setRollAgain(true);
+        return sumValue;
+      default:
+        setRuleApplied("");
+        return sumValue;
     }
-    // Check if the number ends with a 4
-    if (sumValue % 10 === 4 && sumValue > 10) {
-      setRuleApplied(sumValue + " Ends with 4: Subtract 10");
-      return sumValue - 10;
-    }
-    // Check if the number ends with a 4
-    if (sumValue % 10 === 2) {
-      setRuleApplied(sumValue + " Ends with 2: Add 10");
-      return sumValue + 10;
-    }
-    return sumValue;
   };
 
   return (
@@ -93,18 +102,13 @@ function DiceGamePlayerForm(props) {
             style={{ width: "24ch", minWidth: "180px", flex: 1 }}
           />
         </div>
+        {ruleApplied && (
+          <div style={{ padding: 10 }}>
+            <em>Last Rule Applied: {ruleApplied}</em>
+          </div>
+        )}
         <div>
-          <label htmlFor="ruleApplied-input">Rule applied:</label>
-          <input
-            type="text"
-            id="ruleApplied-input"
-            name="ruleApplied-input"
-            value={ruleApplied}
-            onChange={(e) => e.preventDefault()}
-          />
-        </div>
-        <div>
-          <label htmlFor="roundSum-input">Round Sum:</label>
+          <label htmlFor="roundSum-input">Total Score:</label>
           <input
             type="text"
             id="roundSum-input"
@@ -114,7 +118,7 @@ function DiceGamePlayerForm(props) {
           />
         </div>
       </div>
-      <div>
+      <div style={{ padding: 10 }}>
         <button
           onClick={rollDice}
           disabled={
@@ -126,6 +130,7 @@ function DiceGamePlayerForm(props) {
           {loading ? "Rolling..." : "Roll the Dice"}
         </button>
       </div>
+      <div style={{ padding: 10 }}></div>
     </div>
   );
 }

@@ -28,8 +28,35 @@ function DiceGameContainer() {
       }}
     >
       <h2>Multiply Up - A Dice Game</h2>
-      <h3>Current Turn: Player {playerTurn}</h3>
-      {winner && <h3>Winner: Player {winner}</h3>}
+      {!winner && (
+        <>
+          <p>
+            Each player rolls two six-sided dice. The resulting numbers are
+            multiplied and added to that players total score. However, special
+            rules apply at the end of each round based on the last digit of the
+            total score:
+          </p>
+          <ul>
+            <li>
+              If the total score ends with a 0, the player's score resets to 0.
+            </li>
+            <li>
+              If the total score ends with a 4 and is greater than 10, subtract
+              10 from the score.
+            </li>
+            <li>If the total score ends with a 2, add 10 to the score.</li>
+            <li>
+              If the total score ends with a 5, divide the score by 2 (rounding
+              down).
+            </li>
+            <li>If the total score ends with a 7, the player gets to roll again.</li>
+          </ul>
+          <p>First to 100 Wins!</p>
+          <h4>Current Turn: Player {playerTurn}</h4>
+        </>
+      )}
+
+      {winner && <h3 style={{color: "green"}}>Winner: Player {winner}</h3>}
       <div style={{ display: "flex", gap: "2rem", justifyContent: "left" }}>
         <DiceGamePlayerForm
           playerNumber={1}
