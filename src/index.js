@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import MathContainer from './components/math/MathContainer';
+import DiceGameContainer from './components/dice/DiceGameContainer';
 
 function App() {
   return (
@@ -9,6 +10,9 @@ function App() {
       <p>Welcome to my React application.</p>
       <div>
         <MathContainer />
+      </div>
+      <div>
+        <DiceGameContainer />
       </div>
     </div>
   );
