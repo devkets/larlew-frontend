@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MathContainer from './math/MathContainer';
 import DiceGameContainer from './dice/DiceGameContainer';
+import Weather from './weather/weather';
 
 const Home = () => {
   const [activeSection, setActiveSection] = useState('home');
@@ -125,6 +126,16 @@ const Home = () => {
           >
             Contact
           </a>
+          <a
+            href="#weather"
+            style={activeSection === 'weather' ? activeLinkStyle : linkStyle}
+            onClick={(e) => {
+              e.preventDefault();
+              handleLinkClick('weather');
+            }}
+          >
+            Weather
+          </a>
         </nav>
       </aside>
 
@@ -166,6 +177,15 @@ const Home = () => {
           <div style={headerStyle}>
             <h1 style={titleStyle}>Contact</h1>
             <p style={subtitleStyle}>Get in touch with us.</p>
+          </div>
+        )}
+
+        {activeSection === 'weather' && (
+          <div>
+            <div style={headerStyle}>
+              <h1 style={titleStyle}>Weather</h1>
+            </div>
+            <Weather />
           </div>
         )}
       </main>
